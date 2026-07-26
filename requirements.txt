@@ -58,6 +58,10 @@ langchain-google-genai==4.3.1
 langchain-huggingface==1.2.2
 langchain-protocol==0.0.18
 langchain-text-splitters==1.1.2
+langgraph==1.2.9
+langgraph-checkpoint==4.1.1
+langgraph-prebuilt==1.1.0
+langgraph-sdk==0.4.2
 langsmith==0.10.10
 markdown-it-py==4.2.0
 MarkupSafe==3.0.3
@@ -78,6 +82,7 @@ opentelemetry-proto==1.44.0
 opentelemetry-sdk==1.44.0
 opentelemetry-semantic-conventions==0.65b0
 orjson==3.11.9
+ormsgpack==1.12.2
 overrides==7.7.0
 packaging==26.2
 propcache==0.5.2
@@ -130,7 +135,7 @@ uuid_utils==0.17.0
 uvicorn==0.51.0
 watchfiles==1.2.0
 websocket-client==1.9.0
-websockets==16.1.1
+websockets==15.0.1
 xxhash==3.8.1
 yarl==1.24.5
 zstandard==0.25.0
