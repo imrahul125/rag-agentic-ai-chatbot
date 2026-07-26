@@ -16,12 +16,16 @@ class LLMService:
             raise ValueError("OPENROUTER_API_KEY not found.")
 
         self.client = OpenAI(
-            base_url="https://openrouter.ai/api/v1",
-            api_key=api_key,
-        )
+    base_url="https://openrouter.ai/api/v1",
+    api_key=api_key,
+    default_headers={
+        "HTTP-Referer": "https://github.com/imrahul125/rag-agentic-ai-chatbot",
+        "X-Title": "RAG Agentic AI Chatbot"
+    }
+)
 
         # Free model
-        self.model = "meta-llama/llama-3.3-8b-instruct:free"
+        self.model = "openrouter/auto"
 
     def generate(self, prompt: str):
 
