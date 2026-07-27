@@ -11,6 +11,17 @@ class RAGService:
             question,
             k=3
         )
+        best_distance = results[0][1]
+
+# Lower distance = better match
+        if best_distance > 0.8:
+            return {
+                "answer": "I could not find the answer in the provided document.",
+                "confidence": 0.0,
+                "sources": []
+    }
+
+        
 
         context = "\n\n".join(
             [doc.page_content for doc, _ in results]
@@ -54,7 +65,7 @@ Answer:
             "sources": [
                 {
                     "score": round(1 - score, 2),
-                    "text": doc.page_content
+                    "text": doc.page_content[:300]
                 }
                 for doc, score in results
             ],
