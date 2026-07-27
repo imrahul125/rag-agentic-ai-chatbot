@@ -23,3 +23,10 @@ ChromaDB
 HuggingFace
 OpenRouter
 Sentence Transformers
+
+
+```git clone ... ```
+```python -m venv venv```
+```pip install -r requirements.txt```
+```python -m scripts.build_vectordb```
+```uvicorn app.main:app --reload```
