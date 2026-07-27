@@ -1,24 +1,22 @@
-fastapi
-uvicorn
-python-dotenv
+fastapi==0.140.0
+uvicorn==0.51.0
+python-dotenv==1.2.2
 
-langgraph
-langchain-core
-langchain-community
-langchain-text-splitters
-langchain-huggingface
-langchain-chroma
+langgraph==1.2.9
+langchain-core==1.5.1
+langchain-community==0.4.2
+langchain-text-splitters==1.1.2
+langchain-huggingface==1.2.2
+langchain-chroma==1.1.0
 
-chromadb
+chromadb==1.5.9
 
-sentence-transformers
+sentence-transformers==5.6.1
 transformers
-
-pypdf
-
-openai
-
 torch
 
+pypdf==6.14.2
+
+openai==2.48.0
+
 numpy
-requests

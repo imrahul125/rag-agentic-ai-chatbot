@@ -2,4 +2,10 @@ venv/
 .env
 __pycache__/
 *.pyc
+
 vectorstore/
+chromadb/
+
+.pytest_cache/
+.idea/
+.vscode/
