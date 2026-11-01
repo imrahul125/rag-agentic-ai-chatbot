@@ -1,7 +1,9 @@
 from app.services.llm import llm
 
-print(
-    llm.generate(
-        "Explain Agentic AI in one sentence."
-    )
-)
+
+def main():
+    print(llm.generate("Reply with one short greeting."))
+
+
+if __name__ == "__main__":
+    main()

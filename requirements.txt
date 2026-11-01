@@ -1,6 +1,8 @@
 fastapi==0.140.0
 uvicorn==0.51.0
 python-dotenv==1.2.2
+python-multipart==0.0.20
+streamlit==1.66.1
 
 langgraph==1.2.9
 langchain-core==1.5.1
@@ -10,13 +12,10 @@ langchain-huggingface==1.2.2
 langchain-chroma==1.1.0
 
 chromadb==1.5.9
-
 sentence-transformers==5.6.1
 transformers
 torch
 
 pypdf==6.14.2
-
 openai==2.48.0
-
 numpy

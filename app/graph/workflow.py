@@ -1,33 +1,23 @@
-from typing import TypedDict
+from typing import Any, TypedDict
 
-from langgraph.graph import StateGraph, END
+from langgraph.graph import END, StateGraph
 
 from app.services.rag import rag
 
 
-class GraphState(TypedDict):
+class GraphState(TypedDict, total=False):
     question: str
+    vector_db: Any
     answer: str
-    confidence: float
     sources: list
 
 
 def retrieve_and_answer(state: GraphState):
-    result = rag.ask(state["question"])
-
-    return {
-        "answer": result["answer"],
-        "confidence": result["confidence"],
-        "sources": result["sources"],
-    }
+    return rag.ask(state["vector_db"], state["question"])
 
 
 builder = StateGraph(GraphState)
-
 builder.add_node("rag", retrieve_and_answer)
-
 builder.set_entry_point("rag")
-
 builder.add_edge("rag", END)
-
 graph = builder.compile()

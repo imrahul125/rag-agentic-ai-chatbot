@@ -1,14 +1,5 @@
-from app.services.rag import rag
+from scripts.test_graph import main
 
-response = rag.ask(
-    "What is Agentic AI?"
-)
 
-print("\nANSWER\n")
-print(response["answer"])
-
-print("\nCONFIDENCE\n")
-print(response["confidence"])
-
-print("\nSOURCE 1\n")
-print(response["sources"][0]["text"][:500])
+if __name__ == "__main__":
+    main()

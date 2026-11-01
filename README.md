@@ -1,336 +1,116 @@
-# 🤖 Agentic AI RAG Chatbot
-
-A **Retrieval-Augmented Generation (RAG)** chatbot built with **Python, LangGraph, ChromaDB, HuggingFace Embeddings, FastAPI, and OpenRouter LLM**. The chatbot answers user questions **strictly based on the Agentic AI eBook** by retrieving relevant document chunks before generating responses.
-
-## 📌 Features
-
-- 📖 PDF ingestion and text extraction
-- ✂️ Automatic document chunking
-- 🧠 Sentence Transformer embeddings
-- 🗂️ ChromaDB vector database
-- 🔍 Semantic similarity search
-- 🔄 LangGraph workflow
-- 💬 OpenRouter LLM integration
-- 🚀 FastAPI REST API
-- 📚 Source chunk retrieval
-- 📊 Confidence score with every response
-- ❌ Prevents answering questions outside the provided document
-
----
-
-# 🏗️ Architecture
-
-```
-                Agentic AI eBook (PDF)
-                         │
-                         ▼
-               PDF Text Extraction
-                         │
-                         ▼
-                 Text Chunking
-                         │
-                         ▼
-             HuggingFace Embeddings
-                         │
-                         ▼
-                  ChromaDB Storage
-                         │
-                         ▼
-               Similarity Retrieval
-                         │
-                         ▼
-                 LangGraph Workflow
-                         │
-                         ▼
-              OpenRouter Large Language Model
-                         │
-                         ▼
-                FastAPI REST API Response
-```
-
----
-
-# 🛠️ Tech Stack
-
-| Technology | Purpose |
-|------------|---------|
-| Python | Backend |
-| FastAPI | REST API |
-| LangGraph | Workflow orchestration |
-| ChromaDB | Vector Database |
-| HuggingFace | Embeddings |
-| Sentence Transformers | Embedding Model |
-| OpenRouter | LLM |
-| PyPDF | PDF Parsing |
-
----
-
-# 📂 Project Structure
-
-```
-rag-agentic-ai-chatbot/
-│
-├── app/
-│   ├── api/
-│   │   ├── models.py
-│   │   └── routes.py
-│   │
-│   ├── graph/
-│   │   ├── __init__.py
-│   │   └── workflow.py
-│   │
-│   ├── services/
-│   │   ├── embeddings.py
-│   │   ├── ingest.py
-│   │   ├── llm.py
-│   │   ├── rag.py
-│   │   ├── retriever.py
-│   │   └── vectordb.py
-│   │
-│   ├── config.py
-│   ├── main.py
-│   └── __init__.py
-│
-├── data/
-│   └── Ebook-Agentic-AI.pdf
-│
-├── scripts/
-│   ├── build_vectordb.py
-│   ├── test_graph.py
-│   ├── test_ingest.py
-│   ├── test_llm.py
-│   └── test_retriever.py
-│
-├── vectorstore/
-├── requirements.txt
-├── README.md
-└── .env
-```
+# Document Desk
 
----
+Document Desk is a PDF question-answering dashboard. Upload a text-searchable PDF, wait for its temporary index to build, then ask questions and inspect the source pages behind each answer.
 
-# 🚀 Getting Started
+The bundled Agentic AI PDF is only an optional local example. The dashboard and API do not load it automatically.
 
-## 1️⃣ Clone the Repository
+## Features
 
-```bash
-git clone https://github.com/imrahul125/rag-agentic-ai-chatbot.git
-```
+- Upload one PDF at a time (up to 25 MB and 500 pages).
+- Keep each upload in its own temporary index.
+- Retrieve relevant passages and answer from those passages only.
+- Show source excerpts with page numbers and a retrieval match score.
+- Reject malformed, encrypted, oversized, and image-only PDFs with a useful message.
+- Use OpenRouter for answer generation; embeddings run locally with Sentence Transformers.
+- Delete documents after 60 minutes without activity, or when cleared/replaced.
 
-```bash
-cd rag-agentic-ai-chatbot
-```
+Scanned PDFs need OCR before upload. OCR is not included.
 
----
+## Run locally
 
-## 2️⃣ Create Virtual Environment
+Use Python 3.12 or another Python version supported by the dependencies.
 
-### Windows
+1. Create a virtual environment and install dependencies:
 
-```bash
-python -m venv venv
-```
+    python -m venv .venv
 
-```bash
-venv\Scripts\activate
-```
+Windows:
 
-### Linux / macOS
+    .venv\Scripts\Activate.ps1
+    pip install -r requirements.txt
+    Copy-Item .env.example .env
 
-```bash
-python3 -m venv venv
-```
+macOS/Linux:
 
-```bash
-source venv/bin/activate
-```
+    source .venv/bin/activate
+    pip install -r requirements.txt
+    cp .env.example .env
 
----
+2. Put your OpenRouter key in .env:
 
-## 3️⃣ Install Dependencies
+    OPENROUTER_API_KEY=your_openrouter_api_key
+    OPENROUTER_MODEL=openrouter/auto
 
-```bash
-pip install -r requirements.txt
-```
+3. Start the dashboard:
 
----
+    streamlit run streamlit_app.py
 
-## 4️⃣ Create Environment File
+The dashboard will be available at http://localhost:8501.
 
-Create a file named **.env**
+The key is needed only for answers. The dashboard can start and index a PDF without it.
 
-```env
-OPENROUTER_API_KEY=your_openrouter_api_key
-```
+## Deploy free with Streamlit Community Cloud
 
----
+Streamlit Community Cloud can deploy this app from its GitHub repository at no charge. It connects to the repository and redeploys when a new commit is pushed.
 
-## 5️⃣ Add the PDF
+1. Push this repository to a GitHub account.
+2. Sign in at [Streamlit Community Cloud](https://share.streamlit.io/) with GitHub and choose **Create app**.
+3. Select the repository, the main branch, and streamlit_app.py as the app file.
+4. In **Advanced settings**, select Python 3.12.
+5. In the app's **Settings → Secrets**, add a private app password and your OpenRouter key:
 
-Place the provided eBook inside
+    APP_PASSWORD = "choose-a-private-passphrase"
+    OPENROUTER_API_KEY = "your_openrouter_api_key"
+    OPENROUTER_MODEL = "openrouter/auto"
 
-```
-data/
-```
+6. Deploy the app.
 
-Example:
+Never commit .env or Streamlit secrets. The repository ignores both.
 
-```
-data/Ebook-Agentic-AI.pdf
-```
+When an OpenRouter key is configured in Streamlit secrets, the dashboard requires APP_PASSWORD before it allows use of that key. Anyone with the password can use the app's model quota, so do not post the password publicly.
 
----
+Free hosting has resource and availability limits. The app may sleep or restart; its active PDF sessions and indexes are temporary and will be lost on restart. Hosting is free, while OpenRouter model usage follows the selected model/provider's terms and pricing.
 
-## 6️⃣ Build the Vector Database
+## Privacy and retention
 
-```bash
-python -m scripts.build_vectordb
-```
+- The uploaded PDF is parsed and indexed in the app process. It is not copied into the GitHub repository or saved as a persistent upload.
+- Only the question and retrieved PDF passages are sent to OpenRouter to generate an answer. Review your model provider's data policies before uploading sensitive documents.
+- The index is isolated by document ID, expires after 60 minutes without activity, and is held in process memory until deletion, expiration, or app restart.
+- The in-memory document store is intended for a small demo. It limits the process to 10 active documents and evicts the least-recently-used document when full.
 
-Expected output
+## REST API
 
-```
-Stored 119 chunks.
-```
+The FastAPI API is available separately for local use:
 
----
+    uvicorn app.main:app --reload
 
-## 7️⃣ Run the API
+Interactive API docs are at http://127.0.0.1:8000/docs.
 
-```bash
-uvicorn app.main:app --reload
-```
+Upload a PDF:
 
----
+    curl -F "file=@report.pdf" http://127.0.0.1:8000/documents
 
-## 8️⃣ Open Swagger UI
+Use the returned document_id to ask a question:
 
-Open
+    curl -X POST http://127.0.0.1:8000/chat -H "Content-Type: application/json" -d '{"document_id":"DOCUMENT_ID","question":"Summarize the main points."}'
 
-```
-http://127.0.0.1:8000/docs
-```
+Delete a document session when you are done:
 
----
+    curl -X DELETE http://127.0.0.1:8000/documents/DOCUMENT_ID
 
-# 💬 Example Request
+The optional API uses the same temporary in-memory document store. Do not expose it publicly without adding access control and abuse protection.
 
-```json
-{
-  "question": "What is Agentic AI?"
-}
-```
+## Project layout
 
----
+    app/
+      api/             FastAPI upload, chat, and delete endpoints
+      graph/           LangGraph question-answer workflow
+      services/        PDF parsing, document storage, retrieval, embeddings, and LLM
+    streamlit_app.py   PDF upload and chat dashboard
+    scripts/           Optional local smoke-check scripts
+    data/              Optional sample PDF; never loaded by the dashboard
+    requirements.txt   Runtime dependencies
 
-# ✅ Example Response
+## License
 
-```json
-{
-  "answer": "Agentic AI refers to AI systems capable of autonomous reasoning, planning, and decision-making based on the provided document.",
-  "confidence": 0.63,
-  "sources": [
-    {
-      "score": 0.63,
-      "text": "Agentic AI is..."
-    }
-  ]
-}
-```
-
----
-
-# 📋 Sample Questions
-
-- What is Agentic AI?
-- What are Multi-Agent Systems?
-- What are the applications of Agentic AI?
-- What are the benefits of Agentic AI?
-- How does Agentic AI differ from traditional AI?
-- What are the components of an Agentic AI system?
-
----
-
-# 🔍 API Endpoints
-
-## Health Check
-
-```
-GET /
-```
-
-Returns
-
-```json
-{
-  "message": "Agentic AI RAG Chatbot is running!"
-}
-```
-
----
-
-## Chat Endpoint
-
-```
-POST /chat
-```
-
-Request
-
-```json
-{
-  "question": "What is Agentic AI?"
-}
-```
-
----
-
-# 🧠 How It Works
-
-1. Load the Agentic AI PDF.
-2. Split the document into smaller chunks.
-3. Generate embeddings using Sentence Transformers.
-4. Store embeddings inside ChromaDB.
-5. Retrieve the most relevant chunks using semantic search.
-6. Pass the retrieved context into the LangGraph workflow.
-7. Generate grounded answers using OpenRouter LLM.
-8. Return:
-   - Final Answer
-   - Confidence Score
-   - Retrieved Context
-
----
-
-# 📦 Dependencies
-
-Major libraries used:
-
-- FastAPI
-- Uvicorn
-- LangGraph
-- ChromaDB
-- HuggingFace
-- Sentence Transformers
-- OpenRouter
-- PyPDF
-- Python Dotenv
-
----
-
-# 📄 License
-
-This project was developed as part of the AI Engineer Internship technical assessment.
-
-The knowledge base used is the publicly available **Agentic AI eBook**.
-
----
-
-# 👨‍💻 Author
-
-**Rahul Bhagwat**
-
-GitHub: https://github.com/imrahul125
-
----
-
-## ⭐ If you found this project useful, consider giving it a star.
+See [LICENSE](LICENSE).

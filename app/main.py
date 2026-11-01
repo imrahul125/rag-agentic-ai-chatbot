@@ -2,19 +2,20 @@ from fastapi import FastAPI
 
 from app.api.routes import router
 
-app = FastAPI(
-    title="Agentic AI RAG Chatbot",
-    description="RAG chatbot built with LangGraph, ChromaDB and OpenRouter. Answers are grounded strictly on the Agentic AI eBook.",
-    version="1.0.0"
-)
 
+app = FastAPI(
+    title="Document Chat API",
+    description="Upload a PDF, then ask questions grounded in its text.",
+    version="2.0.0",
+)
 app.include_router(router)
 
-@app.get("/")
+
+@app.get("/", tags=["Health"])
 def home():
     return {
-    "status": "healthy",
-    "application": "Agentic AI RAG Chatbot",
-    "version": "1.0.0",
-    "docs": "/docs"
-}
+        "status": "ok",
+        "application": "Document Chat",
+        "version": "2.0.0",
+        "docs": "/docs",
+    }

@@ -1,10 +1,7 @@
-import os
-from dotenv import load_dotenv
-from google import genai
+"""Compatibility entry point for listing available OpenRouter models."""
 
-load_dotenv()
+from list_openrouter_models import main
 
-client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
-for model in client.models.list():
-    print(model.name)
+if __name__ == "__main__":
+    main()

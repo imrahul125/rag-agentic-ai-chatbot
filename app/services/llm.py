@@ -1,46 +1,47 @@
-import os
-
-from dotenv import load_dotenv
 from openai import OpenAI
 
-load_dotenv()
+from app.config import (
+    OPENROUTER_BASE_URL,
+    OPENROUTER_MODEL,
+    get_openrouter_api_key,
+)
+
+
+APP_URL = "https://github.com/imrahul125/rag-agentic-ai-chatbot"
 
 
 class LLMService:
-
     def __init__(self):
+        self._client: OpenAI | None = None
 
-        api_key = os.getenv("OPENROUTER_API_KEY")
-
-        if not api_key:
-            raise ValueError("OPENROUTER_API_KEY not found.")
-
-        self.client = OpenAI(
-    base_url="https://openrouter.ai/api/v1",
-    api_key=api_key,
-    default_headers={
-        "HTTP-Referer": "https://github.com/imrahul125/rag-agentic-ai-chatbot",
-        "X-Title": "RAG Agentic AI Chatbot"
-    }
-)
-
-        # Free model
-        self.model = "openrouter/auto"
+    @property
+    def client(self) -> OpenAI:
+        if self._client is None:
+            api_key = get_openrouter_api_key()
+            if not api_key:
+                raise ValueError(
+                    "Add OPENROUTER_API_KEY to your .env file or hosting secrets."
+                )
+            self._client = OpenAI(
+                base_url=OPENROUTER_BASE_URL,
+                api_key=api_key,
+                default_headers={
+                    "HTTP-Referer": APP_URL,
+                    "X-Title": "Document Chat",
+                },
+            )
+        return self._client
 
     def generate(self, prompt: str):
-
         response = self.client.chat.completions.create(
-            model=self.model,
-            messages=[
-                {
-                    "role": "user",
-                    "content": prompt,
-                }
-            ],
+            model=OPENROUTER_MODEL,
+            messages=[{"role": "user", "content": prompt}],
             temperature=0,
         )
-
-        return response.choices[0].message.content
+        answer = response.choices[0].message.content
+        if not answer:
+            raise RuntimeError("The language model returned an empty response.")
+        return answer.strip()
 
 
 llm = LLMService()

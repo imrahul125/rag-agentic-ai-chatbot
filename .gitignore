@@ -1,11 +1,20 @@
-venv/
 .env
+.venv/
+venv/
 __pycache__/
-*.pyc
+*.py[cod]
 
-vectorstore/
-chromadb/
-
+.streamlit/secrets.toml
+.streamlit/cache/
 .pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+chroma_db/
+chromadb/
+vectorstore/
+uploads/
+*.sqlite3
+
 .idea/
 .vscode/
