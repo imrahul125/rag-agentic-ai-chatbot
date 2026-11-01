@@ -20,6 +20,7 @@ def main():
         chunks,
         embedding=get_embedding_model(),
         collection_name=f"smoke_{uuid4().hex}",
+        collection_metadata={"hnsw:space": "cosine"},
     )
     for index, (document, relevance) in enumerate(
         document_retriever.retrieve(vector_db, args.question),

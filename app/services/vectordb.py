@@ -5,7 +5,7 @@ from app.services.embeddings import get_embedding_model
 
 
 DB_PATH = PROJECT_ROOT / "chroma_db"
-COLLECTION_NAME = "agentic_ai_ebook"
+COLLECTION_NAME = "agentic_ai_ebook_cosine"
 
 
 def get_vector_db(collection_name: str = COLLECTION_NAME):

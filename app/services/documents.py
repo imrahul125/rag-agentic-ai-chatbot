@@ -47,6 +47,7 @@ class DocumentStore:
             documents=chunks,
             embedding=get_embedding_model(),
             collection_name=collection_name,
+            collection_metadata={"hnsw:space": "cosine"},
         )
         pages = {
             chunk.metadata.get("page")

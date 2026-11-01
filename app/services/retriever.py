@@ -2,24 +2,29 @@ from app.config import MIN_RELEVANCE_SCORE
 
 
 class DocumentRetriever:
-    def __init__(self, top_k: int = 4, minimum_relevance: float = MIN_RELEVANCE_SCORE):
+    def __init__(self, top_k: int = 8, minimum_relevance: float = MIN_RELEVANCE_SCORE):
         self.top_k = top_k
         self.minimum_relevance = minimum_relevance
 
     def retrieve(self, vector_db, question: str):
-        """Return only retrieved passages that clear the relevance floor."""
+        """Return cosine-ranked passages above a low recall-oriented floor."""
         if not question or not question.strip():
             return []
 
-        matches = vector_db.similarity_search_with_relevance_scores(
+        # The collections created by DocumentStore use Chroma's cosine metric.
+        # Its raw score is cosine distance, so 1 - distance is cosine similarity.
+        matches = vector_db.similarity_search_with_score(
             question.strip(),
             k=self.top_k,
         )
         relevant = []
-        for document, score in matches:
-            if score is None or score < self.minimum_relevance:
+        for document, distance in matches:
+            if distance is None:
                 continue
-            relevant.append((document, max(0.0, min(float(score), 1.0))))
+            similarity = 1.0 - float(distance)
+            if similarity < self.minimum_relevance:
+                continue
+            relevant.append((document, max(0.0, min(similarity, 1.0))))
         return relevant
 
 

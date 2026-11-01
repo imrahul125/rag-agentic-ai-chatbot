@@ -22,6 +22,7 @@ def main():
         embedding=get_embedding_model(),
         ids=stable_ids,
         collection_name=COLLECTION_NAME,
+        collection_metadata={"hnsw:space": "cosine"},
         persist_directory=str(DB_PATH),
     )
     print(f"Indexed {len(chunks)} chunks from {sample_pdf.name}.")

@@ -135,7 +135,7 @@ with st.sidebar:
 
     if st.session_state.document_id and st.button(
         "Clear current PDF",
-        use_container_width=True,
+        width="stretch",
     ):
         document_store.delete(st.session_state.document_id)
         st.session_state.document_id = None
@@ -188,7 +188,7 @@ with st.sidebar:
 
         if st.session_state.upload_error:
             st.error(st.session_state.upload_error)
-            if st.button("Retry indexing", use_container_width=True):
+            if st.button("Retry indexing", width="stretch"):
                 st.session_state.last_upload_hash = None
                 st.rerun()
         elif st.session_state.document_hash == upload_hash:
